@@ -6,13 +6,13 @@ $disabledUserDays = 35
 $deletedCompDays = 60
 $deletedUserDays = 60
 
-$disabledUsersFileLocation = 'C:\Users\jesse.r.cape.ctr\Desktop\StaleUsers.csv'
-$disabledCompsFileLocation = 'C:\Users\jesse.r.cape.ctr\Desktop\StaleComps.csv'
+$disabledUsersFileLocation = '[fileLocation]'
+$disabledCompsFileLocation = '[fileLocation]'
 
 # Don't disable accounts contained in these OUs
-$reservedOUs = @('Deployed', 'VIP', 'Servers')
+$reservedOUs = @('Reserved')
 
-$SearchBase = "OU=Benning,OU=Installations,DC=nase,DC=ds,DC=army,DC=mil" 
+$SearchBase = 'OU=TESTOU,DC=TESTDC'
 
 # --------------------------------- #
 
@@ -88,8 +88,8 @@ A list of System.DirectoryServices.DirectoryEntry objects matching the Filter cr
 under the SearchBase subdomain
 
 .EXAMPLE 
-$searchBase = "OU=Benning,OU=Installations,DC=nase,DC=ds,DC=army,DC=mil"
-$filter = "(name=bennwki31000*)"
+$searchBase = "OU=TESTOU,DC=TESTDC"
+$filter = "(name=testcomp*)"
 Get-LDAPComputer -SearchBase $searchBase -Filter $Filter
 #>
 Function Get-LDAPComputer {
@@ -125,7 +125,7 @@ A list of System.DirectoryServices.DirectoryEntry objects matching the Filter cr
 under the SearchBase subdomain
 
 .EXAMPLE 
-$searchBase = "OU=Benning,OU=Installations,DC=nase,DC=ds,DC=army,DC=mil"
+$searchBase = "OU=TESTOU,DC=TESTDC"
 $filter = "(name=cape, jesse)"
 Get-LDAPUser -SearchBase $searchBase -Filter $Filter
 #>
@@ -320,7 +320,7 @@ Function Delete-ADObject {
     foreach($ADObject in $ADObjects) {
         # Add a note to the account description
         if($ADObject.description -notcontains "Stale Deleted") {
-            # Update-ADObjectDescription -ADObject $ADObject -Description "[Stale Deleted $date]"
+            Update-ADObjectDescription -ADObject $ADObject -Description "[Stale Deleted $date]"
             Write-Host "[New Stale]"
         }
         else {
